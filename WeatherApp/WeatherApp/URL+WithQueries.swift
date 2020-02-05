@@ -1,11 +1,3 @@
-//
-//  URL+WithQueries.swift
-//  WeatherApp
-//
-//  Created by Ivan Budim on 04/02/2020.
-//  Copyright © 2020 Ivan Budim. All rights reserved.
-//
-
 import Foundation
 
 extension URL {
