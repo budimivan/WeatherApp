@@ -1,6 +1,7 @@
 import Foundation
 
 extension URL {
+    
     func withQueries(_ quries: [String: String]) -> URL? {
         var components = URLComponents(url: self, resolvingAgainstBaseURL: true)
         components?.queryItems = quries.map
