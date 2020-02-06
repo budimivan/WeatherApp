@@ -13,14 +13,15 @@ class CurrentWeatherAPI {
         self.query = query
     }
     
-    func getCurrentWeather () {
+    func getCurrentWeather (handleCurrentWeather: @escaping (CurrentWeather) -> Void)  {
         guard let url = baseURL?.withQueries(query) else { return }
         let task = URLSession.shared.dataTask(with: url) { (data, response, error) in
             let jsonDecoder = JSONDecoder()
-            if let data = data,
+            if
+                let data = data,
                 let city = try? jsonDecoder.decode(CurrentWeather.self, from: data) {
-                print("Temparature in Zagreb is \(city.weatherDetails.temparature) °C")
-                }
+                handleCurrentWeather(city)
+            }
         }
         task.resume()
     }
