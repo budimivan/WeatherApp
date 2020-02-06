@@ -9,12 +9,10 @@ class SceneDelegate: UIResponder, UIWindowSceneDelegate {
         willConnectTo session: UISceneSession,
         options connectionOptions: UIScene.ConnectionOptions
     ) -> Void {
-        guard let _ = (scene as? UIWindowScene) else { return }
-        if let windowScene = scene as? UIWindowScene {
+        guard let windowScene = (scene as? UIWindowScene) else { return }
         window = UIWindow(windowScene: windowScene)
         let navigationService = NavigationService()
             navigationService.pushWeatherViewController(window: self.window!)
-        }
     }
 
     func sceneDidDisconnect(_ scene: UIScene) {
