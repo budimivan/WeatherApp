@@ -12,7 +12,7 @@ class SceneDelegate: UIResponder, UIWindowSceneDelegate {
         guard let windowScene = (scene as? UIWindowScene) else { return }
         window = UIWindow(windowScene: windowScene)
         let navigationService = NavigationService()
-            navigationService.pushWeatherViewController(window: self.window!)
+        navigationService.pushWeatherViewController(window: self.window!)
     }
 
     func sceneDidDisconnect(_ scene: UIScene) {
