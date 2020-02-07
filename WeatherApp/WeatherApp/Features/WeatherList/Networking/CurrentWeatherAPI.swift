@@ -13,7 +13,7 @@ class CurrentWeatherAPI {
         self.query = query
     }
     
-    func getCurrentWeather (handleCurrentWeather: @escaping (CurrentWeather) -> Void)  {
+    func getCurrentWeather (handleCurrentWeather: @escaping (CurrentWeather) -> Void) {
         guard let url = baseURL?.withQueries(query) else { return }
         let task = URLSession.shared.dataTask(with: url) { (data, response, error) in
             let jsonDecoder = JSONDecoder()
