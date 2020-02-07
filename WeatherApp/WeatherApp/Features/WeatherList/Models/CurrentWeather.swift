@@ -18,7 +18,8 @@ struct CurrentWeather: Decodable {
     
     init(from decoder: Decoder) throws {
         let valueContainer = try decoder.container(keyedBy: CodingKeys.self)
-        self.weatherDescription = try valueContainer.decode([WeatherDescription].self, forKey: CodingKeys.weatherDescription)
+        self.weatherDescription = try valueContainer.decode([WeatherDescription].self,
+                                                            forKey: CodingKeys.weatherDescription)
         self.weatherDetails = try valueContainer.decode(WeatherDetails.self, forKey: CodingKeys.weatherDetails)
         self.sunRiseSet = try valueContainer.decode(SunRiseSet.self, forKey: CodingKeys.sunRiseSet)
         self.cityID = try valueContainer.decode(Int.self, forKey: CodingKeys.cityID)

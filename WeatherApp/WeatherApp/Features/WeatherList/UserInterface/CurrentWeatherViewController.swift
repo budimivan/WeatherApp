@@ -10,8 +10,7 @@ class CurrentWeatherViewController: UIViewController, UITableViewDataSource, UIT
         query: [
         "q": "Zagreb,HR",
         "units": "metric",
-        "appid": "0ae08e96bcda3b9db5d64ea863097b60"]
-    )
+        "appid": "0ae08e96bcda3b9db5d64ea863097b60"])
     
     override func viewDidLoad() {
         super.viewDidLoad()
@@ -24,21 +23,22 @@ class CurrentWeatherViewController: UIViewController, UITableViewDataSource, UIT
     
     func handleCurrentWeather(weather: CurrentWeather) {
         self.cityWeather = weather
-        DispatchQueue.main.async {
-            self.tableView.reloadData()
+        DispatchQueue.main.async { [weak self] in
+            self?.tableView.reloadData()
         }
     }
     
     func getWeather() {
-            self.currentWeatherAPI.getCurrentWeather(handleCurrentWeather: self.handleCurrentWeather)
+            currentWeatherAPI.getCurrentWeather(handleCurrentWeather: handleCurrentWeather)
     }
     
     func numberOfSections(in tableView: UITableView) -> Int {
         return 1
     }
     
-    func tableView(_ tableView: UITableView,
-                   numberOfRowsInSection section: Int
+    func tableView(
+        _ tableView: UITableView,
+        numberOfRowsInSection section: Int
     ) -> Int {
         if cityWeather != nil {
             return 1
@@ -46,10 +46,13 @@ class CurrentWeatherViewController: UIViewController, UITableViewDataSource, UIT
         return 0
     }
     
-    func tableView(_ tableView: UITableView,
-                   cellForRowAt indexPath: IndexPath
+    func tableView(
+        _ tableView: UITableView,
+        cellForRowAt indexPath: IndexPath
     ) -> UITableViewCell {
-        let cell = tableView.dequeueReusableCell(withIdentifier: "WeatherCustomCell", for: indexPath) as! WeatherCustomCell
+        let cell = tableView.dequeueReusableCell(
+            withIdentifier: "WeatherCustomCell",
+            for: indexPath) as! WeatherCustomCell
         cell.cityName.text = cityWeather?.cityName
         cell.currentTemparature.text = "12 °C"
         return cell

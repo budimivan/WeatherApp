@@ -8,8 +8,10 @@ class NavigationService: NSObject {
                                     toolbarClass: nil)
 
     func pushWeatherViewController(window: UIWindow) {
-        let weatherViewController = CurrentWeatherViewController(nibName: "CurrentWeather", bundle: nil)
-        rootNavigationController.pushViewController(weatherViewController, animated: true)
+        let weatherViewController = CurrentWeatherViewController(nibName: "CurrentWeather",
+                                                                 bundle: nil)
+        rootNavigationController.pushViewController(weatherViewController,
+                                                    animated: true)
         window.rootViewController = rootNavigationController
         window.makeKeyAndVisible()
     }
