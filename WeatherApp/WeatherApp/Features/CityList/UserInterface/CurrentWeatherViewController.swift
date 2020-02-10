@@ -4,13 +4,12 @@ class CurrentWeatherViewController: UIViewController, UITableViewDataSource, UIT
 
     @IBOutlet weak var tableView: UITableView!
     var cityWeather: CurrentWeather?
-    
-    let currentWeatherAPI = CurrentWeatherAPI(
-        baseURL: "https://api.openweathermap.org/data/2.5/weather",
-        query: [
-        "q": "Zagreb,HR",
-        "units": "metric",
-        "appid": "0ae08e96bcda3b9db5d64ea863097b60"])
+    var presenter: CityListPresenter!
+
+    convenience init(presenter: CityListPresenter) {
+        self.init()
+        self.presenter = presenter
+    }
     
     override func viewDidLoad() {
         super.viewDidLoad()
@@ -29,7 +28,7 @@ class CurrentWeatherViewController: UIViewController, UITableViewDataSource, UIT
     }
     
     func getWeather() {
-            currentWeatherAPI.getCurrentWeather(handleCurrentWeather: handleCurrentWeather)
+        presenter.getWeatherData(handleCurrentWeather: handleCurrentWeather)
     }
     
     func numberOfSections(in tableView: UITableView) -> Int {
