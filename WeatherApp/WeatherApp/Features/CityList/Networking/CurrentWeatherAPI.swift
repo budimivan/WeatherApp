@@ -2,19 +2,20 @@ import Foundation
 
 class CurrentWeatherAPI {
     
-    var baseURL: URL?
-    var query: [String: String] 
-    
-    init(
-        baseURL: String,
-        query: [String: String]
-    ) {
-        self.baseURL = URL(string: baseURL)
-        self.query = query
-    }
+    var currentWeatherPath: String = "/weather"
+    var currentWeatherQuery: [String: String] = [
+        "q": "Zagreb,HR",
+        "units": "metric",
+        "appid": "0ae08e96bcda3b9db5d64ea863097b60"]
     
     func getCurrentWeather (handleCurrentWeather: @escaping (CurrentWeather) -> Void) {
-        guard let url = baseURL?.withQueries(query) else { return }
+        let currentWeatherFullPath = APIConstants.baseURL + currentWeatherPath
+        guard
+            let currentWeatherURL = URL(string: currentWeatherFullPath),
+            let url = currentWeatherURL.withQueries(currentWeatherQuery)
+        else {
+            return
+        }
         let task = URLSession.shared.dataTask(with: url) { (data, response, error) in
             let jsonDecoder = JSONDecoder()
             if
