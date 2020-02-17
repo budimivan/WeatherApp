@@ -4,11 +4,11 @@ class CurrentWeatherAPI {
     
     var currentWeatherPath: String = "/weather"
     var currentWeatherQuery: [String: String] = [
-        "q": "Zagreb,HR",
         "units": "metric",
         "appid": "0ae08e96bcda3b9db5d64ea863097b60"]
     
-    func getCurrentWeather (handleCurrentWeather: @escaping (CurrentWeather) -> Void) {
+    func getCurrentWeather (handleCurrentWeather: @escaping (CurrentWeather) -> Void, _ cityName: String) {
+        currentWeatherQuery["q"] = cityName
         let currentWeatherFullPath = APIConstants.baseURL + currentWeatherPath
         guard
             let currentWeatherURL = URL(string: currentWeatherFullPath),

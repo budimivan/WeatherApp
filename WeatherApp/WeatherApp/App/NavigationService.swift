@@ -16,9 +16,8 @@ class NavigationService: NSObject {
         window.makeKeyAndVisible()
     }
     
-//TODO:
-//    func pushDetailsWeatherViewController() {
-//        let vc = WeatherDetailsVC()
-//        rootNavigationController.pushVC(vc, animater: true)
-//    }
+    func pushDetailsWeatherViewController() {
+        let detailsWeatherViewController = DetailsWeatherViewController()
+        rootNavigationController.pushViewController(detailsWeatherViewController, animated: true)
+    }
 }

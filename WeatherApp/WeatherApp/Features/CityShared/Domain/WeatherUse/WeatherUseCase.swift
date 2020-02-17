@@ -8,7 +8,7 @@ class WeatherUseCase {
         self.weatherRepository = weatherRepository
     }
     
-   func getWeatherData(handleCurrentWeather: @escaping (CurrentWeather) -> Void) {
-        weatherRepository.getWeatherData(handleCurrentWeather: handleCurrentWeather)
+    func getWeatherData(handleCurrentWeather: @escaping (CurrentWeather) -> Void, _ cityName: String) {
+        weatherRepository.getWeatherData(handleCurrentWeather: handleCurrentWeather, cityName)
     }
 }
