@@ -2,6 +2,6 @@ import Foundation
 
 protocol CurrentWeatherDelegate: class {
     
-    func handldeWeatherData(weatherViewModel: CurrentWeatherViewModel)
+    func handleWeatherData(weatherViewModel: CurrentWeatherViewModel)
     
 }

@@ -18,7 +18,7 @@ class DetailsWeatherViewController: UIViewController {
         if unixdate == 0 {return ""}
         let date = NSDate(timeIntervalSince1970: TimeInterval(unixdate))
         let dayTimePeriodFormatter = DateFormatter()
-        dayTimePeriodFormatter.dateFormat = "hh:mm"
+        dayTimePeriodFormatter.dateFormat = "H:mm"
         dayTimePeriodFormatter.timeZone = NSTimeZone(name: timezone) as TimeZone?
         let dateString = dayTimePeriodFormatter.string(from: date as Date)
         return dateString
