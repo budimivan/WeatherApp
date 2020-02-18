@@ -51,7 +51,6 @@ class CurrentWeatherViewController:
         DispatchQueue.main.async { [weak self] in
             guard let self = self else { return }
             self.cityListCurrent.append(weatherViewModel)
-           
         }
     }
 
@@ -111,62 +110,8 @@ class CurrentWeatherViewController:
             for: indexPath) as! WeatherCustomCell
         let cityForecastWeather = cityListForecast[indexPath.row]
         let cityCurrentWeather = cityListCurrent[indexPath.row]
-        cell.cityName.text = cityCurrentWeather.cityName
-        cell.currentTemparature.text = String(format: "%.0f", cityCurrentWeather.weatherTemparature) + " °C"
-        cell.forcastDayOne.text = String(format: "%.0f", cityForecastWeather.weatherTemparature[0]) + " °C"
-        cell.forcastDayTwo.text = String(format: "%.0f", cityForecastWeather.weatherTemparature[1]) + " °C"
-        cell.forcastDayThree.text = String(format: "%.0f", cityForecastWeather.weatherTemparature[2]) + " °C"
-        cell.forcastDayFour.text =  String(format: "%.0f", cityForecastWeather.weatherTemparature[3]) + " °C"
-        cell.forcastDayFive.text = String(format: "%.0f", cityForecastWeather.weatherTemparature[4]) + " °C"
-        //refactor code for image, Kingfisher?
-        let image = "https://openweathermap.org/img/w/" + cityCurrentWeather.weatherIcon! + ".png"
-        let url = URL(string: image)
-        DispatchQueue.global().async {
-            let data = try? Data(contentsOf: url!)
-            DispatchQueue.main.async {
-                cell.currentWeatherIcon.image = UIImage(data: data!)
-            }
-        }
-        _ = "https://openweathermap.org/img/w/" + cityForecastWeather.weatherIcon[0] + ".png"
-        _ = URL(string: image)
-        DispatchQueue.global().async {
-            let data = try? Data(contentsOf: url!)
-            DispatchQueue.main.async {
-                cell.forcastDayOneIcon.image = UIImage(data: data!)
-            }
-        }
-        _ = "https://openweathermap.org/img/w/" + cityForecastWeather.weatherIcon[1] + ".png"
-        _ = URL(string: image)
-        DispatchQueue.global().async {
-            let data = try? Data(contentsOf: url!)
-            DispatchQueue.main.async {
-                cell.forcastDayTwoIcon.image = UIImage(data: data!)
-            }
-        }
-        _ = "https://openweathermap.org/img/w/" + cityForecastWeather.weatherIcon[2] + ".png"
-        _ = URL(string: image)
-        DispatchQueue.global().async {
-            let data = try? Data(contentsOf: url!)
-            DispatchQueue.main.async {
-                cell.forcastDayThreeIcon.image = UIImage(data: data!)
-            }
-        }
-        _ = "https://openweathermap.org/img/w/" + cityForecastWeather.weatherIcon[3] + ".png"
-        _ = URL(string: image)
-        DispatchQueue.global().async {
-            let data = try? Data(contentsOf: url!)
-            DispatchQueue.main.async {
-                cell.forcastDayFourIcon.image = UIImage(data: data!)
-            }
-        }
-        _ = "https://openweathermap.org/img/w/" + cityForecastWeather.weatherIcon[4] + ".png"
-        _ = URL(string: image)
-        DispatchQueue.global().async {
-            let data = try? Data(contentsOf: url!)
-            DispatchQueue.main.async {
-                cell.forcastDayFiveIcon.image = UIImage(data: data!)
-            }
-        }
+        cell.setCellUIProperties(cityCurrentWeather: cityCurrentWeather,
+                                 cityForecastWeather: cityForecastWeather)
         return cell
     }
     
@@ -190,9 +135,12 @@ class CurrentWeatherViewController:
     func tableView(
         _ tableView: UITableView,
         didSelectRowAt indexPath: IndexPath) {
-// this does not work, why?
-//        let navigationService = NavigationService()
-//        navigationService.pushDetailsWeatherViewController()
-        self.present(DetailsWeatherViewController(city: cityListCurrent[indexPath.row]), animated: true, completion: nil)
+        self.navigationController?.pushViewController(
+            DetailsWeatherViewController(city: cityListCurrent[indexPath.row]),
+            animated: true)
+// TODO deciede to use current or this method to push screens
+//        self.present(DetailsWeatherViewController(city: cityListCurrent[indexPath.row]),
+//                     animated: true,
+//                     completion: nil)
     }
 }
