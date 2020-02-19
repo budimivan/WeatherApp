@@ -1,10 +1,19 @@
 import UIKit
 
-class CurrentWeatherViewController: UIViewController, UITableViewDataSource, UITableViewDelegate {
-
+class CurrentWeatherViewController:
+    UIViewController,
+    UITableViewDataSource,
+    UITableViewDelegate,
+    UISearchBarDelegate,
+    UISearchResultsUpdating,
+    CurrentWeatherDelegate,
+    ForecastWeatherDelegate {
+   
     @IBOutlet weak var tableView: UITableView!
-    var cityWeather: CurrentWeather?
     var presenter: CityListPresenter!
+    var cityListCurrent = [CurrentWeatherViewModel]()
+    var cityListForecast = [ForecastWeatherViewModel]()
+    let searchController = UISearchController(searchResultsController: nil)
 
     convenience init(presenter: CityListPresenter) {
         self.init()
@@ -13,22 +22,72 @@ class CurrentWeatherViewController: UIViewController, UITableViewDataSource, UIT
     
     override func viewDidLoad() {
         super.viewDidLoad()
-        getWeather()
-        self.tableView.delegate = self
-        self.tableView.dataSource = self
+        presenter.currentWeatherDelegate = self
+        presenter.forecastWeatherDelegate = self
+        tableView.delegate = self
+        tableView.dataSource = self
+        searchController.searchBar.delegate = self
+        searchController.searchResultsUpdater = self
+        searchController.obscuresBackgroundDuringPresentation = false
+        searchController.searchBar.placeholder = AppStrings.searchBarPlaceHolder
+        navigationItem.searchController = searchController
+        definesPresentationContext = true
         let nib = UINib(nibName: "WeatherCustomCell", bundle: nil)
         tableView.register(nib, forCellReuseIdentifier: "WeatherCustomCell")
+        navigationItem.rightBarButtonItem = editButtonItem
+    }
+
+    func updateSearchResults(for searchController: UISearchController) {
     }
     
-    func handleCurrentWeather(weather: CurrentWeather) {
-        self.cityWeather = weather
+    override func setEditing(
+        _ editing: Bool,
+        animated: Bool) {
+        super.setEditing(!isEditing, animated: true)
+        tableView.setEditing(!tableView.isEditing, animated: true)
+    }
+
+    func handleWeatherData(weatherViewModel: CurrentWeatherViewModel) {
         DispatchQueue.main.async { [weak self] in
-            self?.tableView.reloadData()
+            guard let self = self else { return }
+            self.cityListCurrent.append(weatherViewModel)
+        }
+    }
+
+    func handleForecastData(weatherViewModel: ForecastWeatherViewModel) {
+        DispatchQueue.main.async { [weak self] in
+            guard let self = self else { return }
+            self.cityListForecast.append(weatherViewModel)
+            self.tableView.reloadData()
         }
     }
     
-    func getWeather() {
-        presenter.getWeatherData(handleCurrentWeather: handleCurrentWeather)
+     func tableView(
+        _ tableView: UITableView,
+        editingStyleForRowAt indexPath: IndexPath
+     ) -> UITableViewCell.EditingStyle {
+        return .delete
+    }
+
+     func tableView(
+        _ tableView: UITableView,
+        shouldIndentWhileEditingRowAt indexPath: IndexPath
+     ) -> Bool {
+        return false
+    }
+    
+    func tableView(
+        _ tableView: UITableView,
+        moveRowAt sourceIndexPath: IndexPath,
+        to destinationIndexPath: IndexPath) {
+        let movedObject = cityListCurrent[sourceIndexPath.row]
+        cityListCurrent.remove(at: sourceIndexPath.row)
+        cityListCurrent.insert(movedObject, at: destinationIndexPath.row)
+    }
+    
+    func searchBarSearchButtonClicked(_ searchBar: UISearchBar) {
+        presenter.getWeatherData(searchBar.text!)
+        searchController.isActive = false
     }
     
     func numberOfSections(in tableView: UITableView) -> Int {
@@ -39,10 +98,7 @@ class CurrentWeatherViewController: UIViewController, UITableViewDataSource, UIT
         _ tableView: UITableView,
         numberOfRowsInSection section: Int
     ) -> Int {
-        if cityWeather != nil {
-            return 1
-        }
-        return 0
+        return cityListCurrent.count
     }
     
     func tableView(
@@ -52,8 +108,33 @@ class CurrentWeatherViewController: UIViewController, UITableViewDataSource, UIT
         let cell = tableView.dequeueReusableCell(
             withIdentifier: "WeatherCustomCell",
             for: indexPath) as! WeatherCustomCell
-        cell.cityName.text = cityWeather?.cityName
-        cell.currentTemparature.text = "12 °C"
+        let cityForecastWeather = cityListForecast[indexPath.row]
+        let cityCurrentWeather = cityListCurrent[indexPath.row]
+        cell.setCellUIProperties(cityCurrentWeather: cityCurrentWeather,
+                                 cityForecastWeather: cityForecastWeather)
         return cell
+    }
+    
+    func tableView(
+        _ tableView: UITableView,
+        canEditRowAt indexPath: IndexPath
+    ) -> Bool {
+        return true
+    }
+
+    func tableView(
+        _ tableView: UITableView,
+        commit editingStyle: UITableViewCell.EditingStyle,
+        forRowAt indexPath: IndexPath) {
+        if (editingStyle == .delete) {
+            cityListCurrent.remove(at: indexPath.row)
+            tableView.reloadData()
+        }
+    }
+    
+    func tableView(
+        _ tableView: UITableView,
+        didSelectRowAt indexPath: IndexPath) {
+        presenter.handleCitySelected(city: cityListCurrent[indexPath.row])
     }
 }
