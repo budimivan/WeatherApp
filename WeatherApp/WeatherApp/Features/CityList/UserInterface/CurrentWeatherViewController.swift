@@ -29,7 +29,7 @@ class CurrentWeatherViewController:
         searchController.searchBar.delegate = self
         searchController.searchResultsUpdater = self
         searchController.obscuresBackgroundDuringPresentation = false
-        searchController.searchBar.placeholder = "Search cities"
+        searchController.searchBar.placeholder = AppStrings.searchBarPlaceHolder
         navigationItem.searchController = searchController
         definesPresentationContext = true
         let nib = UINib(nibName: "WeatherCustomCell", bundle: nil)
@@ -135,12 +135,6 @@ class CurrentWeatherViewController:
     func tableView(
         _ tableView: UITableView,
         didSelectRowAt indexPath: IndexPath) {
-        self.navigationController?.pushViewController(
-            DetailsWeatherViewController(city: cityListCurrent[indexPath.row]),
-            animated: true)
-// TODO deciede to use current or this method to push screens
-//        self.present(DetailsWeatherViewController(city: cityListCurrent[indexPath.row]),
-//                     animated: true,
-//                     completion: nil)
+        presenter.handleCitySelected(city: cityListCurrent[indexPath.row])
     }
 }

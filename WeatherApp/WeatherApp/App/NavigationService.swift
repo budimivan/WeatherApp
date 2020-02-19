@@ -9,15 +9,16 @@ class NavigationService: NSObject {
                                     toolbarClass: nil)
 
     func pushWeatherViewController(window: UIWindow) {
-        let weatherViewController = CurrentWeatherViewController(presenter: appDependencies.cityListPresenter)
+        let presenter: CityListPresenter = appDependencies.buildCityListPresenter(navigationService: self)
+        let weatherViewController = CurrentWeatherViewController(presenter: presenter)
         rootNavigationController.pushViewController(weatherViewController,
                                                     animated: true)
         window.rootViewController = rootNavigationController
         window.makeKeyAndVisible()
     }
     
-    func pushDetailsWeatherViewController() {
-        let detailsWeatherViewController = DetailsWeatherViewController()
-        rootNavigationController.pushViewController(detailsWeatherViewController, animated: true)
+    func pushDetailsWeatherViewController(city: CurrentWeatherViewModel) {
+        let detailsWeatherViewController = DetailsWeatherViewController(city: city)
+        rootNavigationController.present(detailsWeatherViewController, animated: true)
     }
 }
