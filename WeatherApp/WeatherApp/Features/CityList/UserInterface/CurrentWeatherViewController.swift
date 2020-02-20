@@ -1,19 +1,19 @@
 import UIKit
+import RxSwift
 
 class CurrentWeatherViewController:
     UIViewController,
     UITableViewDataSource,
     UITableViewDelegate,
     UISearchBarDelegate,
-    UISearchResultsUpdating,
-    CurrentWeatherDelegate,
-    ForecastWeatherDelegate {
+    UISearchResultsUpdating {
    
+    private let disposeBag = DisposeBag()
+    let searchController = UISearchController(searchResultsController: nil)
     @IBOutlet weak var tableView: UITableView!
     var presenter: CityListPresenter!
     var cityListCurrent = [CurrentWeatherViewModel]()
     var cityListForecast = [ForecastWeatherViewModel]()
-    let searchController = UISearchController(searchResultsController: nil)
 
     convenience init(presenter: CityListPresenter) {
         self.init()
@@ -22,8 +22,6 @@ class CurrentWeatherViewController:
     
     override func viewDidLoad() {
         super.viewDidLoad()
-        presenter.currentWeatherDelegate = self
-        presenter.forecastWeatherDelegate = self
         tableView.delegate = self
         tableView.dataSource = self
         searchController.searchBar.delegate = self
@@ -45,13 +43,6 @@ class CurrentWeatherViewController:
         animated: Bool) {
         super.setEditing(!isEditing, animated: true)
         tableView.setEditing(!tableView.isEditing, animated: true)
-    }
-
-    func handleWeatherData(weatherViewModel: CurrentWeatherViewModel) {
-        DispatchQueue.main.async { [weak self] in
-            guard let self = self else { return }
-            self.cityListCurrent.append(weatherViewModel)
-        }
     }
 
     func handleForecastData(weatherViewModel: ForecastWeatherViewModel) {
@@ -86,7 +77,25 @@ class CurrentWeatherViewController:
     }
     
     func searchBarSearchButtonClicked(_ searchBar: UISearchBar) {
-        presenter.getWeatherData(searchBar.text!)
+        presenter
+            .getCurrentWeatherData(searchBar.text ?? "")
+            .observeOn(MainScheduler.instance)
+            .subscribeOn(ConcurrentDispatchQueueScheduler(qos: .background))
+            .subscribe(onSuccess: { [weak self] model in
+                self?.cityListCurrent.append(model)
+                self?.tableView.reloadData()
+            })
+            .disposed(by: disposeBag)
+        
+        presenter
+            .getForecastData(searchBar.text ?? "")
+            .observeOn(MainScheduler.instance)
+            .subscribeOn(ConcurrentDispatchQueueScheduler(qos: .background))
+            .subscribe(onSuccess: { [weak self] model in
+                self?.cityListForecast.append(model)
+                self?.tableView.reloadData()
+            })
+            .disposed(by: disposeBag)
         searchController.isActive = false
     }
     

@@ -1,4 +1,5 @@
 import Foundation
+import RxSwift
 
 class WeatherDataRepository {
     
@@ -8,11 +9,11 @@ class WeatherDataRepository {
         self.currentWeatherAPI = currentWeatherAPI
     }
     
-    func getCurrentWeatherData(handleCurrentWeather: @escaping (CurrentWeather) -> Void, _ cityName: String) {
-        currentWeatherAPI.getCurrentWeather(handleCurrentWeather: handleCurrentWeather, cityName)
+    func getCurrentWeatherData(_ cityName: String) -> Single<CurrentWeather> {
+        return currentWeatherAPI.getCurrentWeather(cityName)
     }
     
-    func getForecastWeatherData(handleForecastWeather: @escaping (ForecastWeather) -> Void, _ cityName: String) {
-        currentWeatherAPI.getForcastWeather(handleForecastWeather: handleForecastWeather, cityName)
+    func getForecastWeatherData(_ cityName: String) -> Single<ForecastWeather> {
+        return currentWeatherAPI.getForcastWeather(cityName)
     }
 }
