@@ -14,23 +14,23 @@ class CurrentWeatherAPI {
     
     func getCurrentWeather (_ cityName: String
     ) -> Single<CurrentWeather> {
-        return Single<CurrentWeather>.create { single in
-            var weatherQueryCity = self.weatherQuery
-            weatherQueryCity["q"] = cityName
-            let currentWeatherFullPath = APIConstants.baseURL + self.currentWeatherPath
+        return Single<CurrentWeather>.create { [weak self] single in
+            var weatherQueryCity = self?.weatherQuery
+            weatherQueryCity?["q"] = cityName
+            let currentWeatherFullPath = APIConstants.baseURL + (self?.currentWeatherPath ?? "")
             guard
                 let currentWeatherURL = URL(string: currentWeatherFullPath),
-                let url = currentWeatherURL.withQueries(weatherQueryCity)
+                let url = currentWeatherURL.withQueries(weatherQueryCity ?? ["":""])
             else {
                 single(.error(APIError.wrongURL(url: currentWeatherFullPath)))
                 return Disposables.create()
             }
             let task = URLSession.shared.dataTask(with: url) { (data, response, error) in
-                let jsonDecoder = JSONDecoder()
-                if
-                    let data = data,
-                    let city = try? jsonDecoder.decode(CurrentWeather.self, from: data) {
-                    single(.success(city))
+               do {
+                    let jsonDecoder = try JSONDecoder().decode(CurrentWeather.self, from: data ?? Data())
+                    single(.success(jsonDecoder))
+                } catch let error {
+                    single(.error(error))
                 }
             }
             task.resume()
@@ -42,23 +42,23 @@ class CurrentWeatherAPI {
     
     func getForcastWeather (_ cityName: String
     ) -> Single<ForecastWeather>  {
-        return Single<ForecastWeather>.create { single in
-            var weatherQueryCity = self.weatherQuery
-            weatherQueryCity["q"] = cityName
-            let forecastWeatherFullPath = APIConstants.baseURL + self.forecastWeatherPath
+        return Single<ForecastWeather>.create { [weak self] single in
+            var weatherQueryCity = self?.weatherQuery
+            weatherQueryCity?["q"] = cityName
+            let forecastWeatherFullPath = APIConstants.baseURL + (self?.forecastWeatherPath ?? "")
             guard
                 let forecastWeatherURL = URL(string: forecastWeatherFullPath),
-                let url = forecastWeatherURL.withQueries(weatherQueryCity)
+                let url = forecastWeatherURL.withQueries(weatherQueryCity ??  ["":""])
             else {
                 single(.error(APIError.wrongURL(url: forecastWeatherFullPath)))
                 return Disposables.create()
             }
             let task = URLSession.shared.dataTask(with: url) { (data, response, error) in
-                let jsonDecoder = JSONDecoder()
-                if
-                    let data = data,
-                    let city = try? jsonDecoder.decode(ForecastWeather.self, from: data) {
-                    single(.success(city))
+                do {
+                    let jsonDecoder = try JSONDecoder().decode(ForecastWeather.self, from: data ?? Data())
+                    single(.success(jsonDecoder))
+                } catch let error {
+                    single(.error(error))
                 }
             }
             task.resume()

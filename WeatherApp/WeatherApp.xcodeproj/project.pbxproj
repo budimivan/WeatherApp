@@ -3,14 +3,13 @@
 	archiveVersion = 1;
 	classes = {
 	};
-	objectVersion = 52;
+	objectVersion = 51;
 	objects = {
 
 /* Begin PBXBuildFile section */
 		9809555A23F6FC9F0045DB94 /* ForecastWeather.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9809555923F6FC9F0045DB94 /* ForecastWeather.swift */; };
 		980D061D23EC116100F3F1B7 /* NavigationService.swift in Sources */ = {isa = PBXBuildFile; fileRef = 980D061C23EC116100F3F1B7 /* NavigationService.swift */; };
 		980D062123EC244B00F3F1B7 /* CurrentWeatherViewController.xib in Resources */ = {isa = PBXBuildFile; fileRef = 980D062023EC244B00F3F1B7 /* CurrentWeatherViewController.xib */; };
-		9819461A23FC22C600BACC4B /* Kingfisher in Frameworks */ = {isa = PBXBuildFile; productRef = 9819461923FC22C600BACC4B /* Kingfisher */; };
 		9819461C23FC27C300BACC4B /* CustomDateAndTime.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9819461B23FC27C300BACC4B /* CustomDateAndTime.swift */; };
 		9819461E23FD2A8F00BACC4B /* Array+Extension.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9819461D23FD2A8F00BACC4B /* Array+Extension.swift */; };
 		9819462023FD2EE500BACC4B /* AppStrings.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9819461F23FD2EE500BACC4B /* AppStrings.swift */; };
@@ -21,7 +20,6 @@
 		9855558323EAB72A00E51BE8 /* WeatherDetails.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9855558223EAB72A00E51BE8 /* WeatherDetails.swift */; };
 		986E72E923FE79E000D78BF9 /* APIError.swift in Sources */ = {isa = PBXBuildFile; fileRef = 986E72E823FE79E000D78BF9 /* APIError.swift */; };
 		986E72EA23FE826C00D78BF9 /* Pods_WeatherApp.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 8AC5E4DD92966B1899A4BD04 /* Pods_WeatherApp.framework */; };
-		986E72EB23FE826C00D78BF9 /* Pods_WeatherApp.framework in Embed Frameworks */ = {isa = PBXBuildFile; fileRef = 8AC5E4DD92966B1899A4BD04 /* Pods_WeatherApp.framework */; settings = {ATTRIBUTES = (CodeSignOnCopy, RemoveHeadersOnCopy, ); }; };
 		98944A9623E962E500D41268 /* AppDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = 98944A9523E962E500D41268 /* AppDelegate.swift */; };
 		98944A9823E962E500D41268 /* SceneDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = 98944A9723E962E500D41268 /* SceneDelegate.swift */; };
 		98944A9A23E962E500D41268 /* CurrentWeatherViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 98944A9923E962E500D41268 /* CurrentWeatherViewController.swift */; };
@@ -45,20 +43,6 @@
 		98EE881623F18D1500234F1E /* AppDependencies.swift in Sources */ = {isa = PBXBuildFile; fileRef = 98EE881523F18D1500234F1E /* AppDependencies.swift */; };
 		98EE881823F18E0000234F1E /* APIConstants.swift in Sources */ = {isa = PBXBuildFile; fileRef = 98EE881723F18E0000234F1E /* APIConstants.swift */; };
 /* End PBXBuildFile section */
-
-/* Begin PBXCopyFilesBuildPhase section */
-		986E72EC23FE826C00D78BF9 /* Embed Frameworks */ = {
-			isa = PBXCopyFilesBuildPhase;
-			buildActionMask = 2147483647;
-			dstPath = "";
-			dstSubfolderSpec = 10;
-			files = (
-				986E72EB23FE826C00D78BF9 /* Pods_WeatherApp.framework in Embed Frameworks */,
-			);
-			name = "Embed Frameworks";
-			runOnlyForDeploymentPostprocessing = 0;
-		};
-/* End PBXCopyFilesBuildPhase section */
 
 /* Begin PBXFileReference section */
 		02767A6EB5F00FDF0073FF49 /* Pods-WeatherApp.debug.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-WeatherApp.debug.xcconfig"; path = "Target Support Files/Pods-WeatherApp/Pods-WeatherApp.debug.xcconfig"; sourceTree = "<group>"; };
@@ -111,7 +95,6 @@
 			isa = PBXFrameworksBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
-				9819461A23FC22C600BACC4B /* Kingfisher in Frameworks */,
 				986E72EA23FE826C00D78BF9 /* Pods_WeatherApp.framework in Frameworks */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
@@ -340,7 +323,6 @@
 				98944A8F23E962E500D41268 /* Frameworks */,
 				98944A9023E962E500D41268 /* Resources */,
 				684052079302A4769E31646E /* [CP] Embed Pods Frameworks */,
-				986E72EC23FE826C00D78BF9 /* Embed Frameworks */,
 			);
 			buildRules = (
 			);
@@ -348,7 +330,6 @@
 			);
 			name = WeatherApp;
 			packageProductDependencies = (
-				9819461923FC22C600BACC4B /* Kingfisher */,
 			);
 			productName = WeatherApp;
 			productReference = 98944A9223E962E500D41268 /* WeatherApp.app */;
@@ -379,7 +360,6 @@
 			);
 			mainGroup = 98944A8923E962E500D41268;
 			packageReferences = (
-				9819461823FC22C600BACC4B /* XCRemoteSwiftPackageReference "Kingfisher" */,
 			);
 			productRefGroup = 98944A9323E962E500D41268 /* Products */;
 			projectDirPath = "";
@@ -672,25 +652,6 @@
 			defaultConfigurationName = Release;
 		};
 /* End XCConfigurationList section */
-
-/* Begin XCRemoteSwiftPackageReference section */
-		9819461823FC22C600BACC4B /* XCRemoteSwiftPackageReference "Kingfisher" */ = {
-			isa = XCRemoteSwiftPackageReference;
-			repositoryURL = "https://github.com/onevcat/Kingfisher";
-			requirement = {
-				kind = upToNextMajorVersion;
-				minimumVersion = 5.13.1;
-			};
-		};
-/* End XCRemoteSwiftPackageReference section */
-
-/* Begin XCSwiftPackageProductDependency section */
-		9819461923FC22C600BACC4B /* Kingfisher */ = {
-			isa = XCSwiftPackageProductDependency;
-			package = 9819461823FC22C600BACC4B /* XCRemoteSwiftPackageReference "Kingfisher" */;
-			productName = Kingfisher;
-		};
-/* End XCSwiftPackageProductDependency section */
 	};
 	rootObject = 98944A8A23E962E500D41268 /* Project object */;
 }

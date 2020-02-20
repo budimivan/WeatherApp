@@ -83,7 +83,6 @@ class CurrentWeatherViewController:
             .subscribeOn(ConcurrentDispatchQueueScheduler(qos: .background))
             .subscribe(onSuccess: { [weak self] model in
                 self?.cityListCurrent.append(model)
-                self?.tableView.reloadData()
             })
             .disposed(by: disposeBag)
         
