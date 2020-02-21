@@ -1,4 +1,5 @@
 import Foundation
+import RxSwift
 
 class WeatherUseCase {
      
@@ -8,11 +9,11 @@ class WeatherUseCase {
         self.weatherRepository = weatherRepository
     }
     
-    func getCurrentWeatherData(handleCurrentWeather: @escaping (CurrentWeather) -> Void, _ cityName: String) {
-        weatherRepository.getCurrentWeatherData(handleCurrentWeather: handleCurrentWeather, cityName)
+    func getCurrentWeatherData(_ cityName: String) -> Observable<CurrentWeather> {
+        return weatherRepository.getCurrentWeatherData(cityName)
     }
     
-    func getForecastWeatherData(handleForecastWeather: @escaping (ForecastWeather) -> Void, _ cityName: String) {
-        weatherRepository.getForecastWeatherData(handleForecastWeather: handleForecastWeather, cityName)
+    func getForecastWeatherData(_ cityName: String) -> Observable<ForecastWeather> {
+        return weatherRepository.getForecastWeatherData(cityName)
     }
 }

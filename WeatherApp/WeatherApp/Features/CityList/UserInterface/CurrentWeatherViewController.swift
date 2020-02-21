@@ -1,19 +1,19 @@
 import UIKit
+import RxSwift
 
 class CurrentWeatherViewController:
     UIViewController,
     UITableViewDataSource,
     UITableViewDelegate,
     UISearchBarDelegate,
-    UISearchResultsUpdating,
-    CurrentWeatherDelegate,
-    ForecastWeatherDelegate {
+    UISearchResultsUpdating {
    
+    private let disposeBag = DisposeBag()
+    let searchController = UISearchController(searchResultsController: nil)
     @IBOutlet weak var tableView: UITableView!
     var presenter: CityListPresenter!
     var cityListCurrent = [CurrentWeatherViewModel]()
     var cityListForecast = [ForecastWeatherViewModel]()
-    let searchController = UISearchController(searchResultsController: nil)
 
     convenience init(presenter: CityListPresenter) {
         self.init()
@@ -22,10 +22,8 @@ class CurrentWeatherViewController:
     
     override func viewDidLoad() {
         super.viewDidLoad()
-        presenter.currentWeatherDelegate = self
-        presenter.forecastWeatherDelegate = self
-        tableView.delegate = self
         tableView.dataSource = self
+        tableView.delegate = self
         searchController.searchBar.delegate = self
         searchController.searchResultsUpdater = self
         searchController.obscuresBackgroundDuringPresentation = false
@@ -45,21 +43,6 @@ class CurrentWeatherViewController:
         animated: Bool) {
         super.setEditing(!isEditing, animated: true)
         tableView.setEditing(!tableView.isEditing, animated: true)
-    }
-
-    func handleWeatherData(weatherViewModel: CurrentWeatherViewModel) {
-        DispatchQueue.main.async { [weak self] in
-            guard let self = self else { return }
-            self.cityListCurrent.append(weatherViewModel)
-        }
-    }
-
-    func handleForecastData(weatherViewModel: ForecastWeatherViewModel) {
-        DispatchQueue.main.async { [weak self] in
-            guard let self = self else { return }
-            self.cityListForecast.append(weatherViewModel)
-            self.tableView.reloadData()
-        }
     }
     
      func tableView(
@@ -86,7 +69,18 @@ class CurrentWeatherViewController:
     }
     
     func searchBarSearchButtonClicked(_ searchBar: UISearchBar) {
-        presenter.getWeatherData(searchBar.text!)
+        Observable.combineLatest(
+            presenter.getCurrentWeatherData(searchBar.text ?? ""),
+            presenter.getForecastData(searchBar.text ?? ""))
+            .observeOn(MainScheduler.instance)
+            .subscribeOn(ConcurrentDispatchQueueScheduler(qos: .background))
+            .subscribe(onNext: { [weak self] observerCurrentWeather, observerForecastWeather in
+                guard let self = self else { return }
+                self.cityListCurrent.append(observerCurrentWeather)
+                self.cityListForecast.append(observerForecastWeather)
+                self.tableView.reloadData()
+            })
+            .disposed(by: disposeBag)
         searchController.isActive = false
     }
     
