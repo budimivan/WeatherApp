@@ -75,9 +75,10 @@ class CurrentWeatherViewController:
             .observeOn(MainScheduler.instance)
             .subscribeOn(ConcurrentDispatchQueueScheduler(qos: .background))
             .subscribe(onNext: { [weak self] observerCurrentWeather, observerForecastWeather in
-                self?.cityListCurrent.append(observerCurrentWeather)
-                self?.cityListForecast.append(observerForecastWeather)
-                self?.tableView.reloadData()
+                guard let self = self else { return }
+                self.cityListCurrent.append(observerCurrentWeather)
+                self.cityListForecast.append(observerForecastWeather)
+                self.tableView.reloadData()
             })
             .disposed(by: disposeBag)
         searchController.isActive = false
@@ -103,7 +104,6 @@ class CurrentWeatherViewController:
             for: indexPath) as! WeatherCustomCell
         let cityForecastWeather = cityListForecast[indexPath.row]
         let cityCurrentWeather = cityListCurrent[indexPath.row]
-        print("update UI")
         cell.setCellUIProperties(cityCurrentWeather: cityCurrentWeather,
                                  cityForecastWeather: cityForecastWeather)
         return cell
