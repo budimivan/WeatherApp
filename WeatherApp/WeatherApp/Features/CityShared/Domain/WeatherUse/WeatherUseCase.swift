@@ -9,11 +9,11 @@ class WeatherUseCase {
         self.weatherRepository = weatherRepository
     }
     
-    func getCurrentWeatherData(_ cityName: String) -> Single<CurrentWeather> {
+    func getCurrentWeatherData(_ cityName: String) -> Observable<CurrentWeather> {
         return weatherRepository.getCurrentWeatherData(cityName)
     }
     
-    func getForecastWeatherData(_ cityName: String) -> Single<ForecastWeather> {
+    func getForecastWeatherData(_ cityName: String) -> Observable<ForecastWeather> {
         return weatherRepository.getForecastWeatherData(cityName)
     }
 }

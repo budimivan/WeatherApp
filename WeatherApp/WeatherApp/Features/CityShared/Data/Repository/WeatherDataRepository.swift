@@ -9,11 +9,11 @@ class WeatherDataRepository {
         self.currentWeatherAPI = currentWeatherAPI
     }
     
-    func getCurrentWeatherData(_ cityName: String) -> Single<CurrentWeather> {
+    func getCurrentWeatherData(_ cityName: String) -> Observable<CurrentWeather> {
         return currentWeatherAPI.getCurrentWeather(cityName)
     }
     
-    func getForecastWeatherData(_ cityName: String) -> Single<ForecastWeather> {
+    func getForecastWeatherData(_ cityName: String) -> Observable<ForecastWeather> {
         return currentWeatherAPI.getForcastWeather(cityName)
     }
 }

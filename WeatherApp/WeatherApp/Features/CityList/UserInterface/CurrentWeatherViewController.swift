@@ -22,8 +22,8 @@ class CurrentWeatherViewController:
     
     override func viewDidLoad() {
         super.viewDidLoad()
-        tableView.delegate = self
         tableView.dataSource = self
+        tableView.delegate = self
         searchController.searchBar.delegate = self
         searchController.searchResultsUpdater = self
         searchController.obscuresBackgroundDuringPresentation = false
@@ -43,14 +43,6 @@ class CurrentWeatherViewController:
         animated: Bool) {
         super.setEditing(!isEditing, animated: true)
         tableView.setEditing(!tableView.isEditing, animated: true)
-    }
-
-    func handleForecastData(weatherViewModel: ForecastWeatherViewModel) {
-        DispatchQueue.main.async { [weak self] in
-            guard let self = self else { return }
-            self.cityListForecast.append(weatherViewModel)
-            self.tableView.reloadData()
-        }
     }
     
      func tableView(
@@ -77,21 +69,14 @@ class CurrentWeatherViewController:
     }
     
     func searchBarSearchButtonClicked(_ searchBar: UISearchBar) {
-        presenter
-            .getCurrentWeatherData(searchBar.text ?? "")
+        Observable.combineLatest(
+            presenter.getCurrentWeatherData(searchBar.text ?? ""),
+            presenter.getForecastData(searchBar.text ?? ""))
             .observeOn(MainScheduler.instance)
             .subscribeOn(ConcurrentDispatchQueueScheduler(qos: .background))
-            .subscribe(onSuccess: { [weak self] model in
-                self?.cityListCurrent.append(model)
-            })
-            .disposed(by: disposeBag)
-        
-        presenter
-            .getForecastData(searchBar.text ?? "")
-            .observeOn(MainScheduler.instance)
-            .subscribeOn(ConcurrentDispatchQueueScheduler(qos: .background))
-            .subscribe(onSuccess: { [weak self] model in
-                self?.cityListForecast.append(model)
+            .subscribe(onNext: { [weak self] observerCurrentWeather, observerForecastWeather in
+                self?.cityListCurrent.append(observerCurrentWeather)
+                self?.cityListForecast.append(observerForecastWeather)
                 self?.tableView.reloadData()
             })
             .disposed(by: disposeBag)
@@ -118,6 +103,7 @@ class CurrentWeatherViewController:
             for: indexPath) as! WeatherCustomCell
         let cityForecastWeather = cityListForecast[indexPath.row]
         let cityCurrentWeather = cityListCurrent[indexPath.row]
+        print("update UI")
         cell.setCellUIProperties(cityCurrentWeather: cityCurrentWeather,
                                  cityForecastWeather: cityForecastWeather)
         return cell

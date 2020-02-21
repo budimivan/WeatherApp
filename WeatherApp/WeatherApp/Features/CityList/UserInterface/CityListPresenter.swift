@@ -11,13 +11,13 @@ class CityListPresenter {
         self.navigationService = navigationService
     }
     
-   func getCurrentWeatherData(_ cityName: String) -> Single<CurrentWeatherViewModel> {
+   func getCurrentWeatherData(_ cityName: String) -> Observable<CurrentWeatherViewModel> {
         return weatherUseCase
             .getCurrentWeatherData(cityName)
             .map {CurrentWeatherViewModel($0)}
    }
     
-    func getForecastData(_ cityName: String) -> Single<ForecastWeatherViewModel> {
+    func getForecastData(_ cityName: String) -> Observable<ForecastWeatherViewModel> {
          return weatherUseCase
             .getForecastWeatherData(cityName)
             .map {ForecastWeatherViewModel($0)}
