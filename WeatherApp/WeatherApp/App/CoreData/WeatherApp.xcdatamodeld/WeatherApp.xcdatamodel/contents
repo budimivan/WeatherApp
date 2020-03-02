@@ -1,0 +1,54 @@
+<?xml version="1.0" encoding="UTF-8" standalone="yes"?>
+<model type="com.apple.IDECoreDataModeler.DataModel" documentVersion="1.0" lastSavedToolsVersion="15702" systemVersion="19D76" minimumToolsVersion="Automatic" sourceLanguage="Swift" userDefinedModelVersionIdentifier="">
+    <entity name="CDclouds" representedClassName="CDclouds" syncable="YES">
+        <attribute name="clouds" optional="YES" attributeType="Double" valueTransformerName="NSSecureUnarchiveFromData" defaultValueString="0.0" usesScalarValueType="YES" customClassName="[Double]"/>
+        <relationship name="cloudsForecast" optional="YES" maxCount="1" deletionRule="Nullify" destinationEntity="CDforecastWeather" inverseName="clouds" inverseEntity="CDforecastWeather"/>
+    </entity>
+    <entity name="CDcurrentWeather" representedClassName="CDcurrentWeather" syncable="YES">
+        <attribute name="cityID" attributeType="Integer 32" defaultValueString="0" usesScalarValueType="YES"/>
+        <attribute name="cityName" optional="YES" attributeType="String"/>
+        <attribute name="clouds" optional="YES" attributeType="Double" defaultValueString="0.0" usesScalarValueType="YES"/>
+        <attribute name="dateDisplayOrder" optional="YES" attributeType="Date" usesScalarValueType="NO"/>
+        <attribute name="sunRise" optional="YES" attributeType="Double" defaultValueString="0.0" usesScalarValueType="YES"/>
+        <attribute name="sunSet" optional="YES" attributeType="Double" defaultValueString="0.0" usesScalarValueType="YES"/>
+        <attribute name="timeUTC" optional="YES" attributeType="Double" defaultValueString="0.0" usesScalarValueType="YES"/>
+        <attribute name="weatherDescription" optional="YES" attributeType="String"/>
+        <attribute name="weatherIcon" optional="YES" attributeType="String"/>
+        <attribute name="weatherTemparature" optional="YES" attributeType="Double" defaultValueString="0.0" usesScalarValueType="YES"/>
+        <attribute name="wind" optional="YES" attributeType="Double" defaultValueString="0.0" usesScalarValueType="YES"/>
+    </entity>
+    <entity name="CDforecastWeather" representedClassName="CDforecastWeather" syncable="YES">
+        <attribute name="cityID" optional="YES" attributeType="Integer 32" defaultValueString="0.0" usesScalarValueType="YES"/>
+        <attribute name="dateDisplayOrder" optional="YES" attributeType="Date" usesScalarValueType="NO"/>
+        <relationship name="clouds" toMany="YES" deletionRule="Nullify" ordered="YES" destinationEntity="CDclouds" inverseName="cloudsForecast" inverseEntity="CDclouds"/>
+        <relationship name="timeUTC" toMany="YES" deletionRule="Nullify" ordered="YES" destinationEntity="CDtimeUTC" inverseName="timeUTCForecast" inverseEntity="CDtimeUTC"/>
+        <relationship name="weatherIcons" toMany="YES" deletionRule="Nullify" ordered="YES" destinationEntity="CDweatherIcons" inverseName="weatherIconsForecast" inverseEntity="CDweatherIcons"/>
+        <relationship name="weatherTemparatures" toMany="YES" deletionRule="Nullify" ordered="YES" destinationEntity="CDweatherTemparatures" inverseName="weatherTemparaturesForecast" inverseEntity="CDweatherTemparatures"/>
+        <relationship name="wind" toMany="YES" deletionRule="Nullify" ordered="YES" destinationEntity="CDwind" inverseName="windForecast" inverseEntity="CDwind"/>
+    </entity>
+    <entity name="CDtimeUTC" representedClassName="CDtimeUTC" syncable="YES">
+        <attribute name="timeUTC" optional="YES" attributeType="Double" valueTransformerName="NSSecureUnarchiveFromData" defaultValueString="0.0" usesScalarValueType="YES" customClassName="[Double]"/>
+        <relationship name="timeUTCForecast" optional="YES" maxCount="1" deletionRule="Nullify" destinationEntity="CDforecastWeather" inverseName="timeUTC" inverseEntity="CDforecastWeather"/>
+    </entity>
+    <entity name="CDweatherIcons" representedClassName="CDweatherIcons" syncable="YES">
+        <attribute name="weatherIcons" optional="YES" attributeType="String" valueTransformerName="NSSecureUnarchiveFromData" customClassName="[Double]"/>
+        <relationship name="weatherIconsForecast" optional="YES" maxCount="1" deletionRule="Nullify" destinationEntity="CDforecastWeather" inverseName="weatherIcons" inverseEntity="CDforecastWeather"/>
+    </entity>
+    <entity name="CDweatherTemparatures" representedClassName="CDweatherTemparatures" syncable="YES">
+        <attribute name="weatherTemparatures" optional="YES" attributeType="Double" valueTransformerName="NSSecureUnarchiveFromData" defaultValueString="0.0" usesScalarValueType="YES" customClassName="[Double]"/>
+        <relationship name="weatherTemparaturesForecast" optional="YES" maxCount="1" deletionRule="Nullify" destinationEntity="CDforecastWeather" inverseName="weatherTemparatures" inverseEntity="CDforecastWeather"/>
+    </entity>
+    <entity name="CDwind" representedClassName="CDwind" syncable="YES">
+        <attribute name="wind" optional="YES" attributeType="Double" valueTransformerName="NSSecureUnarchiveFromData" defaultValueString="0.0" usesScalarValueType="YES" customClassName="[Double]"/>
+        <relationship name="windForecast" optional="YES" maxCount="1" deletionRule="Nullify" destinationEntity="CDforecastWeather" inverseName="wind" inverseEntity="CDforecastWeather"/>
+    </entity>
+    <elements>
+        <element name="CDclouds" positionX="229.82421875" positionY="-59.84765625" width="128" height="73"/>
+        <element name="CDcurrentWeather" positionX="8.54296875" positionY="-72.95703125" width="128" height="208"/>
+        <element name="CDforecastWeather" positionX="36" positionY="72" width="128" height="148"/>
+        <element name="CDtimeUTC" positionX="60.49609375" positionY="204.765625" width="128" height="73"/>
+        <element name="CDweatherIcons" positionX="367.203125" positionY="96.86328125" width="128" height="73"/>
+        <element name="CDweatherTemparatures" positionX="-238.67578125" positionY="-22.98046875" width="128" height="73"/>
+        <element name="CDwind" positionX="-335.90625" positionY="67.921875" width="128" height="73"/>
+    </elements>
+</model>

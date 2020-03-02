@@ -9,11 +9,23 @@ class WeatherUseCase {
         self.weatherRepository = weatherRepository
     }
     
-    func getCurrentWeatherData(_ cityName: String) -> Observable<CurrentWeather> {
-        return weatherRepository.getCurrentWeatherData(cityName)
+    func getCurrentWeatherDataAPI(_ cityName: String) -> Observable<CurrentWeather> {
+        return weatherRepository.getCurrentWeatherDataAPI(cityName)
     }
     
-    func getForecastWeatherData(_ cityName: String) -> Observable<ForecastWeather> {
-        return weatherRepository.getForecastWeatherData(cityName)
+    func getForecastWeatherDataAPI(_ cityName: String) -> Observable<ForecastWeather> {
+        return weatherRepository.getForecastWeatherDataAPI(cityName)
+    }
+    
+    func storeWeatherData(_ currentWeather: CurrentWeatherViewModel, _ forecastWeather: ForecastWeatherViewModel) {
+        weatherRepository.storeWeatherData(currentWeather, forecastWeather)
+    }
+    
+    func getCurrentWeatherDataCD() -> Observable<[CurrentWeatherViewModel]> {
+        return weatherRepository.getCurrentWeatherDataCD()
+    }
+    
+    func getForecastWeatherDataCD() -> Observable<[ForecastWeatherViewModel]> {
+        return weatherRepository.getForecastWeatherDataCD()
     }
 }

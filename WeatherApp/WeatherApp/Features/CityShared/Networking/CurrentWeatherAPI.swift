@@ -9,9 +9,6 @@ class CurrentWeatherAPI {
         "units": "metric",
         "appid": "0ae08e96bcda3b9db5d64ea863097b60"]
     
-    let disposeBag = DisposeBag()
-    
-    
     func getCurrentWeather (_ cityName: String
     ) -> Observable<CurrentWeather> {
         return Observable<CurrentWeather>.create { [weak self] observer in
