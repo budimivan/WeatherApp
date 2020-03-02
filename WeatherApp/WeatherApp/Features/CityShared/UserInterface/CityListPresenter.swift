@@ -17,7 +17,7 @@ class CityListPresenter {
             .map {CurrentWeatherViewModel($0)}
    }
     
-    func getForecastDataAPI(_ cityName: String) -> Observable<ForecastWeatherViewModel> {
+    func getForecastWeatherDataAPI(_ cityName: String) -> Observable<ForecastWeatherViewModel> {
          return weatherUseCase
             .getForecastWeatherDataAPI(cityName)
             .map {ForecastWeatherViewModel($0)}
@@ -27,23 +27,10 @@ class CityListPresenter {
         navigationService.pushDetailsWeatherViewController(city: city)
     }
     
-    func storeWeatherData(_ currentWeather: CurrentWeatherViewModel, _ forecastWeather: ForecastWeatherViewModel) {
-        weatherUseCase.storeWeatherData(currentWeather, forecastWeather)
+    func storeWeatherData(forCityName cityName: String) -> Single<(CurrentWeather, ForecastWeather)> {
+        return weatherUseCase.storeWeatherData(forCityName: cityName)
     }
-    
-    func getWeatherDataAPI(
-        forCityName cityName: String
-    ) -> Single<(CurrentWeatherViewModel, ForecastWeatherViewModel)> {
-        return Observable
-            .combineLatest(
-                getCurrentWeatherDataAPI(cityName),
-                getForecastDataAPI(cityName))
-            .take(1)
-            .asSingle()
-            .observeOn(MainScheduler.instance)
-            .subscribeOn(ConcurrentDispatchQueueScheduler(qos: .background))
-    }
-    
+
     func getCurrentWeatherDataCD() -> Observable<[CurrentWeatherViewModel]> {
          return weatherUseCase.getCurrentWeatherDataCD()
      }
@@ -52,12 +39,10 @@ class CityListPresenter {
          return weatherUseCase.getForecastWeatherDataCD()
      }
     
-    func getWeatherDataCD() -> Single<([CurrentWeatherViewModel], [ForecastWeatherViewModel])>{
+    func getWeatherData() -> Observable<([CurrentWeatherViewModel], [ForecastWeatherViewModel])>{
        return Observable
         .combineLatest(
             getCurrentWeatherDataCD(),
             getForecastWeatherDataCD())
-        .take(1)
-        .asSingle()
     }
 }

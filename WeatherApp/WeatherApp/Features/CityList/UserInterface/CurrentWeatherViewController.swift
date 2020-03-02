@@ -29,8 +29,8 @@ class CurrentWeatherViewController:
         let nib = UINib(nibName: "WeatherCustomCell", bundle: nil)
         tableView.register(nib, forCellReuseIdentifier: "WeatherCustomCell")
         navigationItem.rightBarButtonItem = editButtonItem
-        presenter.getWeatherDataCD()
-            .subscribe(onSuccess: { [weak self] currentWeather, forecastWeather in
+        presenter.getWeatherData()
+            .subscribe(onNext: { [weak self] currentWeather, forecastWeather in
                 guard let self = self else { return }
                 self.cityListCurrent = currentWeather
                 self.cityListForecast = forecastWeather
@@ -77,11 +77,8 @@ class CurrentWeatherViewController:
             let cityName = searchBar.text,
             !cityName.isEmpty
         else { return }
-        presenter.getWeatherDataAPI(forCityName: cityName)
-            .subscribe(onSuccess: { [weak self] observerCurrentWeather, observerForecastWeather in
-                guard let self = self else { return }
-                self.presenter.storeWeatherData(observerCurrentWeather, observerForecastWeather)
-            })
+        presenter.storeWeatherData(forCityName: cityName)
+            .subscribe()
             .disposed(by: disposeBag)
         searchController.isActive = false
     }

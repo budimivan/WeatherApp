@@ -20,10 +20,20 @@ class WeatherDataRepository {
         return currentWeatherAPI.getForcastWeather(cityName)
     }
     
-    func storeWeatherData(_ currentWeather: CurrentWeatherViewModel, _ forecastWeather: ForecastWeatherViewModel) {
-        weatherStore.storeWeatherData(currentWeather, forecastWeather)
-    }
-    
+    func storeWeatherData(forCityName cityName: String) -> Single<(CurrentWeather, ForecastWeather)> {
+            return Observable
+                .combineLatest(
+                   getCurrentWeatherDataAPI(cityName),
+                   getForecastWeatherDataAPI(cityName))
+                .take(1)
+                .asSingle()
+                .observeOn(MainScheduler.instance)
+                .subscribeOn(ConcurrentDispatchQueueScheduler(qos: .background))
+                .do(onSuccess: { [weak self] observerCurrentWeather, observerForecastWeather in
+                    self?.weatherStore.storeWeatherData(CurrentWeatherViewModel(observerCurrentWeather), ForecastWeatherViewModel(observerForecastWeather))
+                })
+        }
+        
     func getCurrentWeatherDataCD() -> Observable<[CurrentWeatherViewModel]> {
         return weatherStore.getCurrentWeather()
     }

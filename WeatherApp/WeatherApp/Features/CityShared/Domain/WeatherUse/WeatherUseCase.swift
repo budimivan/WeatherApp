@@ -17,15 +17,15 @@ class WeatherUseCase {
         return weatherRepository.getForecastWeatherDataAPI(cityName)
     }
     
-    func storeWeatherData(_ currentWeather: CurrentWeatherViewModel, _ forecastWeather: ForecastWeatherViewModel) {
-        weatherRepository.storeWeatherData(currentWeather, forecastWeather)
-    }
-    
     func getCurrentWeatherDataCD() -> Observable<[CurrentWeatherViewModel]> {
         return weatherRepository.getCurrentWeatherDataCD()
     }
     
     func getForecastWeatherDataCD() -> Observable<[ForecastWeatherViewModel]> {
         return weatherRepository.getForecastWeatherDataCD()
+    }
+    
+     func storeWeatherData(forCityName cityName: String) -> Single<(CurrentWeather, ForecastWeather)>  {
+        return weatherRepository.storeWeatherData(forCityName: cityName)
     }
 }
