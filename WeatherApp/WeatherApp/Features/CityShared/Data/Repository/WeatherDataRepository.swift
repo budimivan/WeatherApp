@@ -30,7 +30,9 @@ class WeatherDataRepository {
                 .observeOn(MainScheduler.instance)
                 .subscribeOn(ConcurrentDispatchQueueScheduler(qos: .background))
                 .do(onSuccess: { [weak self] observerCurrentWeather, observerForecastWeather in
-                    self?.weatherStore.storeWeatherData(CurrentWeatherViewModel(observerCurrentWeather), ForecastWeatherViewModel(observerForecastWeather))
+                    self?.weatherStore.storeWeatherData(
+                        CurrentWeatherViewModel(observerCurrentWeather),
+                        ForecastWeatherViewModel(observerForecastWeather))
                 })
         }
         

@@ -1,13 +1,12 @@
 import UIKit
 import RxSwift
 import CoreData
+import RxCocoa
 
 class CurrentWeatherViewController:
     UIViewController,
     UITableViewDataSource,
-    UITableViewDelegate,
-    UISearchBarDelegate,
-    UISearchResultsUpdating {
+    UITableViewDelegate {
    
     @IBOutlet weak var tableView: UITableView!
     var presenter: CityListPresenter!
@@ -20,8 +19,6 @@ class CurrentWeatherViewController:
         super.viewDidLoad()
         tableView.dataSource = self
         tableView.delegate = self
-        searchController.searchBar.delegate = self
-        searchController.searchResultsUpdater = self
         searchController.obscuresBackgroundDuringPresentation = false
         searchController.searchBar.placeholder = AppStrings.searchBarPlaceHolder
         navigationItem.searchController = searchController
@@ -37,9 +34,32 @@ class CurrentWeatherViewController:
                 self.tableView.reloadData()
             })
             .disposed(by: disposeBag)
+        bindSearchBar()
     }
-
-    func updateSearchResults(for searchController: UISearchController) {
+    
+    private func bindSearchBar() {
+        let searchButtonClicked = searchController
+            .searchBar.rx
+            .searchButtonClicked
+           
+        let searchValue = searchController.searchBar.rx.value
+        
+        searchButtonClicked
+            .withLatestFrom(searchValue)
+            .flatMap { [weak self] cityName -> Single<(CurrentWeather, ForecastWeather)> in
+                guard
+                    let self = self,
+                    let cityName = cityName,
+                    !cityName.isEmpty
+                else {
+                    return .never()
+                }
+                return self.presenter.storeWeatherData(forCityName: cityName)
+            }
+            .subscribe(onNext: { [weak self] _ in
+                self?.searchController.isActive = false
+            })
+            .disposed(by: disposeBag)
     }
     
     override func setEditing(
@@ -70,17 +90,6 @@ class CurrentWeatherViewController:
         let movedObject = cityListCurrent[sourceIndexPath.row]
         cityListCurrent.remove(at: sourceIndexPath.row)
         cityListCurrent.insert(movedObject, at: destinationIndexPath.row) 
-    }
-    
-    func searchBarSearchButtonClicked(_ searchBar: UISearchBar) {
-        guard
-            let cityName = searchBar.text,
-            !cityName.isEmpty
-        else { return }
-        presenter.storeWeatherData(forCityName: cityName)
-            .subscribe()
-            .disposed(by: disposeBag)
-        searchController.isActive = false
     }
     
     func numberOfSections(in tableView: UITableView) -> Int {
