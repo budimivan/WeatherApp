@@ -10,7 +10,8 @@ class NavigationService: NSObject {
 
     func pushWeatherViewController(window: UIWindow) {
         let presenter: CityListPresenter = appDependencies.buildCityListPresenter(navigationService: self)
-        let weatherViewController = CurrentWeatherViewController(presenter: presenter)
+        let weatherViewController = CurrentWeatherViewController()
+        weatherViewController.presenter = presenter
         rootNavigationController.pushViewController(weatherViewController,
                                                     animated: true)
         window.rootViewController = rootNavigationController

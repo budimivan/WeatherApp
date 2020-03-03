@@ -13,5 +13,4 @@ struct ForecastWeather: Decodable {
         self.forecastWeather = try valueContainer.decode([ListForecastWeather].self,
                                                          forKey: CodingKeys.forecastWeather)
     }
-    
 }

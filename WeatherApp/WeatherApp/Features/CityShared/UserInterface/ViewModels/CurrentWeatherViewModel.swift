@@ -10,7 +10,7 @@ struct CurrentWeatherViewModel {
     let clouds: Double
     let sunRise: Double
     let sunSet: Double
-    private let weatherIcon: String?
+    let weatherIcon: String?
     let timeUTC: Double
     
     var imagePath: String {
@@ -28,5 +28,18 @@ struct CurrentWeatherViewModel {
         sunSet = weather.sunRiseSet.sunSet
         weatherIcon = weather.weatherDescription.first?.icon
         timeUTC = weather.calculationTimeUTC
+    }
+    
+    init(_ weather: CDcurrentWeather) {
+        cityID = Int(weather.cityID)
+        cityName = weather.cityName
+        weatherTemparature = weather.weatherTemparature
+        weatherDescription = weather.weatherDescription
+        wind = weather.wind
+        clouds = weather.clouds
+        sunRise = weather.sunRise
+        sunSet = weather.sunSet
+        weatherIcon = weather.weatherIcon
+        timeUTC = weather.timeUTC
     }
 }

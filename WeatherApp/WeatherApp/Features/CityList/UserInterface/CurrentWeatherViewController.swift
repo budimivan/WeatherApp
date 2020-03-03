@@ -1,31 +1,24 @@
 import UIKit
 import RxSwift
+import CoreData
+import RxCocoa
 
 class CurrentWeatherViewController:
     UIViewController,
     UITableViewDataSource,
-    UITableViewDelegate,
-    UISearchBarDelegate,
-    UISearchResultsUpdating {
+    UITableViewDelegate {
    
-    private let disposeBag = DisposeBag()
-    let searchController = UISearchController(searchResultsController: nil)
     @IBOutlet weak var tableView: UITableView!
     var presenter: CityListPresenter!
     var cityListCurrent = [CurrentWeatherViewModel]()
     var cityListForecast = [ForecastWeatherViewModel]()
+    let searchController = UISearchController(searchResultsController: nil)
+    private let disposeBag = DisposeBag()
 
-    convenience init(presenter: CityListPresenter) {
-        self.init()
-        self.presenter = presenter
-    }
-    
     override func viewDidLoad() {
         super.viewDidLoad()
         tableView.dataSource = self
         tableView.delegate = self
-        searchController.searchBar.delegate = self
-        searchController.searchResultsUpdater = self
         searchController.obscuresBackgroundDuringPresentation = false
         searchController.searchBar.placeholder = AppStrings.searchBarPlaceHolder
         navigationItem.searchController = searchController
@@ -33,9 +26,40 @@ class CurrentWeatherViewController:
         let nib = UINib(nibName: "WeatherCustomCell", bundle: nil)
         tableView.register(nib, forCellReuseIdentifier: "WeatherCustomCell")
         navigationItem.rightBarButtonItem = editButtonItem
+        presenter.getWeatherData()
+            .subscribe(onNext: { [weak self] currentWeather, forecastWeather in
+                guard let self = self else { return }
+                self.cityListCurrent = currentWeather
+                self.cityListForecast = forecastWeather
+                self.tableView.reloadData()
+            })
+            .disposed(by: disposeBag)
+        bindSearchBar()
     }
-
-    func updateSearchResults(for searchController: UISearchController) {
+    
+    private func bindSearchBar() {
+        let searchButtonClicked = searchController
+            .searchBar.rx
+            .searchButtonClicked
+           
+        let searchValue = searchController.searchBar.rx.value
+        
+        searchButtonClicked
+            .withLatestFrom(searchValue)
+            .flatMap { [weak self] cityName -> Single<(CurrentWeather, ForecastWeather)> in
+                guard
+                    let self = self,
+                    let cityName = cityName,
+                    !cityName.isEmpty
+                else {
+                    return .never()
+                }
+                return self.presenter.storeWeatherData(forCityName: cityName)
+            }
+            .subscribe(onNext: { [weak self] _ in
+                self?.searchController.isActive = false
+            })
+            .disposed(by: disposeBag)
     }
     
     override func setEditing(
@@ -65,23 +89,7 @@ class CurrentWeatherViewController:
         to destinationIndexPath: IndexPath) {
         let movedObject = cityListCurrent[sourceIndexPath.row]
         cityListCurrent.remove(at: sourceIndexPath.row)
-        cityListCurrent.insert(movedObject, at: destinationIndexPath.row)
-    }
-    
-    func searchBarSearchButtonClicked(_ searchBar: UISearchBar) {
-        Observable.combineLatest(
-            presenter.getCurrentWeatherData(searchBar.text ?? ""),
-            presenter.getForecastData(searchBar.text ?? ""))
-            .observeOn(MainScheduler.instance)
-            .subscribeOn(ConcurrentDispatchQueueScheduler(qos: .background))
-            .subscribe(onNext: { [weak self] observerCurrentWeather, observerForecastWeather in
-                guard let self = self else { return }
-                self.cityListCurrent.append(observerCurrentWeather)
-                self.cityListForecast.append(observerForecastWeather)
-                self.tableView.reloadData()
-            })
-            .disposed(by: disposeBag)
-        searchController.isActive = false
+        cityListCurrent.insert(movedObject, at: destinationIndexPath.row) 
     }
     
     func numberOfSections(in tableView: UITableView) -> Int {
@@ -102,10 +110,8 @@ class CurrentWeatherViewController:
         let cell = tableView.dequeueReusableCell(
             withIdentifier: "WeatherCustomCell",
             for: indexPath) as! WeatherCustomCell
-        let cityForecastWeather = cityListForecast[indexPath.row]
-        let cityCurrentWeather = cityListCurrent[indexPath.row]
-        cell.setCellUIProperties(cityCurrentWeather: cityCurrentWeather,
-                                 cityForecastWeather: cityForecastWeather)
+        cell.setCellUIProperties(cityCurrentWeather: cityListCurrent.at(indexPath.row),
+                                 cityForecastWeather: cityListForecast.at(indexPath.row))
         return cell
     }
     

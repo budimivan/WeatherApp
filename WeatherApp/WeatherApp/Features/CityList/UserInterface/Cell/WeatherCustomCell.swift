@@ -29,17 +29,23 @@ class WeatherCustomCell: UITableViewCell {
     }
     
     func setCellUIProperties(
-        cityCurrentWeather: CurrentWeatherViewModel,
-        cityForecastWeather: ForecastWeatherViewModel
+        cityCurrentWeather: CurrentWeatherViewModel?,
+        cityForecastWeather: ForecastWeatherViewModel?
     ) {
+        guard
+            let cityCurrentWeather = cityCurrentWeather,
+            let cityForecastWeather = cityForecastWeather
+        else {
+            return
+        }
         cityName.text = cityCurrentWeather.cityName
 //        TODO: F <-> C + safety
         currentTemparature.text = String(format: "%.0f", cityCurrentWeather.weatherTemparature) + " °C"
-        forcastDayOne.text = String(format: "%.0f", cityForecastWeather.weatherThemparatures[0]) + " °C"
-        forcastDayTwo.text = String(format: "%.0f", cityForecastWeather.weatherThemparatures[1]) + " °C"
-        forcastDayThree.text = String(format: "%.0f", cityForecastWeather.weatherThemparatures[2]) + " °C"
-        forcastDayFour.text =  String(format: "%.0f", cityForecastWeather.weatherThemparatures[3]) + " °C"
-        forcastDayFive.text = String(format: "%.0f", cityForecastWeather.weatherThemparatures[4]) + " °C"
+        forcastDayOne.text = String(format: "%.0f", cityForecastWeather.weatherTemparature[0]) + " °C"
+        forcastDayTwo.text = String(format: "%.0f", cityForecastWeather.weatherTemparature[1]) + " °C"
+        forcastDayThree.text = String(format: "%.0f", cityForecastWeather.weatherTemparature[2]) + " °C"
+        forcastDayFour.text =  String(format: "%.0f", cityForecastWeather.weatherTemparature[3]) + " °C"
+        forcastDayFive.text = String(format: "%.0f", cityForecastWeather.weatherTemparature[4]) + " °C"
         setImage(cityCurrentWeather: cityCurrentWeather, cityForecastWeather: cityForecastWeather)
     }
     
