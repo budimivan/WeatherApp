@@ -2,22 +2,23 @@ import UIKit
 import RxSwift
 import CoreData
 import RxCocoa
+import RxDataSources
 
 class CurrentWeatherViewController:
     UIViewController,
-    UITableViewDataSource,
-    UITableViewDelegate {
+    UITableViewDelegate
+{
    
     @IBOutlet weak var tableView: UITableView!
     var presenter: CityListPresenter!
     var cityListCurrent = [CurrentWeatherViewModel]()
     var cityListForecast = [ForecastWeatherViewModel]()
+    var cityListWeather = [WeatherViewModel]()
     let searchController = UISearchController(searchResultsController: nil)
     private let disposeBag = DisposeBag()
 
     override func viewDidLoad() {
         super.viewDidLoad()
-        tableView.dataSource = self
         tableView.delegate = self
         searchController.obscuresBackgroundDuringPresentation = false
         searchController.searchBar.placeholder = AppStrings.searchBarPlaceHolder
@@ -26,15 +27,38 @@ class CurrentWeatherViewController:
         let nib = UINib(nibName: "WeatherCustomCell", bundle: nil)
         tableView.register(nib, forCellReuseIdentifier: "WeatherCustomCell")
         navigationItem.rightBarButtonItem = editButtonItem
+      
+        let dataSource = RxTableViewSectionedReloadDataSource<SectionOfWeather>(
+          configureCell: { dataSource, tableView, indexPath, item in
+            return self.makeWeatherCustomCell(currentWeather: item.currentWeather, forecastWeather: item.forecastWeather, indexPath: indexPath, from: tableView)
+        })
+    
+        presenter.getWeatherData().map {[SectionOfWeather(header: "weather", items: $0)]}
+          .bind(to: tableView.rx.items(dataSource: dataSource))
+          .disposed(by: disposeBag)
+        
         presenter.getWeatherData()
-            .subscribe(onNext: { [weak self] currentWeather, forecastWeather in
-                guard let self = self else { return }
-                self.cityListCurrent = currentWeather
-                self.cityListForecast = forecastWeather
-                self.tableView.reloadData()
+            .subscribe(onNext: { [weak self] weather in
+                guard let self = self
+                else { return }
+                self.cityListWeather = weather
             })
             .disposed(by: disposeBag)
         bindSearchBar()
+    }
+    
+    func makeWeatherCustomCell(
+        currentWeather: [CurrentWeatherViewModel],
+        forecastWeather: [ForecastWeatherViewModel],
+        indexPath: IndexPath,
+        from table: UITableView
+    ) -> UITableViewCell {
+        let cell = tableView.dequeueReusableCell(
+            withIdentifier: "WeatherCustomCell",
+            for: indexPath) as! WeatherCustomCell
+        cell.setCellUIProperties(cityCurrentWeather: currentWeather.at(indexPath.row),
+                                 cityForecastWeather: forecastWeather.at(indexPath.row))
+        return cell
     }
     
     private func bindSearchBar() {
@@ -89,32 +113,20 @@ class CurrentWeatherViewController:
         to destinationIndexPath: IndexPath) {
         let movedObject = cityListCurrent[sourceIndexPath.row]
         cityListCurrent.remove(at: sourceIndexPath.row)
-        cityListCurrent.insert(movedObject, at: destinationIndexPath.row) 
+        cityListCurrent.insert(movedObject, at: destinationIndexPath.row)
     }
-    
+
     func numberOfSections(in tableView: UITableView) -> Int {
         return 1
     }
-    
+
     func tableView(
         _ tableView: UITableView,
         numberOfRowsInSection section: Int
     ) -> Int {
-        return cityListCurrent.count
+        return cityListWeather.first?.currentWeather.count ?? 0
     }
-    
-    func tableView(
-        _ tableView: UITableView,
-        cellForRowAt indexPath: IndexPath
-    ) -> UITableViewCell {
-        let cell = tableView.dequeueReusableCell(
-            withIdentifier: "WeatherCustomCell",
-            for: indexPath) as! WeatherCustomCell
-        cell.setCellUIProperties(cityCurrentWeather: cityListCurrent.at(indexPath.row),
-                                 cityForecastWeather: cityListForecast.at(indexPath.row))
-        return cell
-    }
-    
+
     func tableView(
         _ tableView: UITableView,
         canEditRowAt indexPath: IndexPath

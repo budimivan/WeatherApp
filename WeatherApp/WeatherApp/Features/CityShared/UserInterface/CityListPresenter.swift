@@ -39,10 +39,10 @@ class CityListPresenter {
          return weatherUseCase.getForecastWeatherDataCD()
      }
     
-    func getWeatherData() -> Observable<([CurrentWeatherViewModel], [ForecastWeatherViewModel])>{
+    func getWeatherData() -> Observable<([WeatherViewModel])>{
        return Observable
         .combineLatest(
             getCurrentWeatherDataCD(),
-            getForecastWeatherDataCD())
+            getForecastWeatherDataCD()).map {[WeatherViewModel(currentWeather: $0, forecastWeather: $1)]}
     }
 }
