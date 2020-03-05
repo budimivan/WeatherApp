@@ -27,7 +27,7 @@ class CurrentWeatherAPI {
                     let jsonDecoder = try JSONDecoder().decode(CurrentWeather.self, from: data ?? Data())
                 observer.onNext(jsonDecoder)
                 } catch let error {
-                    observer.onError(error)
+                    print(error)
                 }
             }
             task.resume()
@@ -55,7 +55,7 @@ class CurrentWeatherAPI {
                     let jsonDecoder = try JSONDecoder().decode(ForecastWeather.self, from: data ?? Data())
                     observer.onNext(jsonDecoder)
                 } catch let error {
-                    observer.onError(error)
+                   print(error)
                 }
             }
             task.resume()

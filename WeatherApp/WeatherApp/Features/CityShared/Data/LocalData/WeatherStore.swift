@@ -19,7 +19,6 @@ class WeatherStore {
         let currentCity: CDcurrentWeather
         cityFetch.predicate = NSPredicate(format: "%K == %ld", #keyPath(CDcurrentWeather.cityID), currentCityID)
         
-            
         do {
             let results = try coreDataStack.managedContext.fetch(cityFetch)
             if results.count > 0 {
@@ -44,7 +43,6 @@ class WeatherStore {
         
         let forecastCity: CDforecastWeather
         cityForecastFetch.predicate = NSPredicate(format: "%K == %ld", #keyPath(CDforecastWeather.cityID), currentCityID)
-        
         
         do {
             let results = try coreDataStack.managedContext.fetch(cityForecastFetch)

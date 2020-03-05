@@ -4,10 +4,10 @@ import CoreData
 import RxCocoa
 import RxDataSources
 
-class CurrentWeatherViewController:
+class WeatherViewController:
     UIViewController
 {
-   
+
     @IBOutlet weak var tableView: UITableView!
     var presenter: CityListPresenter!
     var currentCity: CurrentWeatherViewModel?
@@ -47,13 +47,6 @@ class CurrentWeatherViewController:
           .bind(to: tableView.rx.items(dataSource: dataSource))
           .disposed(by: disposeBag)
         bindSearchBar()
-    }
-    
-    override func setEditing(
-        _ editing: Bool,
-        animated: Bool) {
-        super.setEditing(!isEditing, animated: true)
-        tableView.setEditing(!tableView.isEditing, animated: true)
     }
     
     private func bindSearchBar() {
