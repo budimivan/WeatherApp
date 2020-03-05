@@ -39,10 +39,19 @@ class CityListPresenter {
          return weatherUseCase.getForecastWeatherDataCD()
      }
     
-    func getWeatherData() -> Observable<([CurrentWeatherViewModel], [ForecastWeatherViewModel])>{
-       return Observable
-        .combineLatest(
-            getCurrentWeatherDataCD(),
-            getForecastWeatherDataCD())
+    func getWeatherData() -> Observable<([WeatherViewModel])>{
+        return Observable
+            .combineLatest(
+                getCurrentWeatherDataCD(),
+                getForecastWeatherDataCD())
+            .compactMap { weather, forecast in
+                guard weather.count == forecast.count else { return nil }
+                var array = [WeatherViewModel]()
+                for (index, element) in weather.enumerated() {
+                    guard let forecast = forecast.at(index) else { return nil }
+                    array.append(WeatherViewModel(currentWeather: element, forecastWeather: forecast))
+                }
+                return array
+        }
     }
 }

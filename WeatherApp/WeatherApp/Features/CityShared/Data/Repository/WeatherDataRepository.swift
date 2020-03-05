@@ -36,7 +36,7 @@ class WeatherDataRepository {
                 })
         }
         
-    func getCurrentWeatherDataCD() -> Observable<[CurrentWeatherViewModel]> {
+    func  getCurrentWeatherDataCD() -> Observable<[CurrentWeatherViewModel]> {
         return weatherStore.getCurrentWeather()
     }
     
