@@ -8,7 +8,7 @@ extension WeatherViewController {
     }
     
     private func createViews() {
-        tableView = UITableView(forAutoLayout: ())
+        tableView = UITableView()
         view.addSubview(tableView)
         searchController = UISearchController(searchResultsController: nil)
         navigationItem.searchController = searchController

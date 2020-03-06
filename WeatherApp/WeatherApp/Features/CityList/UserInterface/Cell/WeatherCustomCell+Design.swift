@@ -9,21 +9,21 @@ extension WeatherCustomCell {
     }
     
     private func createViews() {
-        containerView = UIView(forAutoLayout: ())
+        containerView = UIView()
         addSubview(containerView)
-        cityName = UILabel(forAutoLayout: ())
-        currentTemparature = UILabel(forAutoLayout: ())
-        currentWeatherIcon = UIImageView(forAutoLayout: ())
-        forcastDayOne = UILabel(forAutoLayout: ())
-        forcastDayTwo = UILabel(forAutoLayout: ())
-        forcastDayThree = UILabel(forAutoLayout: ())
-        forcastDayFour = UILabel(forAutoLayout: ())
-        forcastDayFive = UILabel(forAutoLayout: ())
-        forcastDayOneIcon = UIImageView(forAutoLayout: ())
-        forcastDayTwoIcon = UIImageView(forAutoLayout: ())
-        forcastDayThreeIcon = UIImageView(forAutoLayout: ())
-        forcastDayFourIcon = UIImageView(forAutoLayout: ())
-        forcastDayFiveIcon = UIImageView(forAutoLayout: ())
+        cityName = UILabel()
+        currentTemparature = UILabel()
+        currentWeatherIcon = UIImageView()
+        forcastDayOne = UILabel()
+        forcastDayTwo = UILabel()
+        forcastDayThree = UILabel()
+        forcastDayFour = UILabel()
+        forcastDayFive = UILabel()
+        forcastDayOneIcon = UIImageView()
+        forcastDayTwoIcon = UIImageView()
+        forcastDayThreeIcon = UIImageView()
+        forcastDayFourIcon = UIImageView()
+        forcastDayFiveIcon = UIImageView()
 
         containerView
             .addSubviews(cityName,
