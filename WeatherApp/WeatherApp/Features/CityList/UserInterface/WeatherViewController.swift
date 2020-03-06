@@ -3,32 +3,26 @@ import RxSwift
 import CoreData
 import RxCocoa
 import RxDataSources
+import PureLayout
 
 class WeatherViewController:
     UIViewController
 {
-
-    @IBOutlet weak var tableView: UITableView!
     var presenter: CityListPresenter!
     var currentCity: CurrentWeatherViewModel?
-    let searchController = UISearchController(searchResultsController: nil)
+    var tableView: UITableView!
+    var searchController: UISearchController!
     private let disposeBag = DisposeBag()
 
     override func viewDidLoad() {
         super.viewDidLoad()
-        searchController.obscuresBackgroundDuringPresentation = false
-        searchController.searchBar.placeholder = AppStrings.searchBarPlaceHolder
-        navigationItem.searchController = searchController
-        definesPresentationContext = true
-        let nib = UINib(nibName: "WeatherCustomCell", bundle: nil)
-        tableView.register(nib, forCellReuseIdentifier: "WeatherCustomCell")
-        navigationItem.rightBarButtonItem = editButtonItem
+        buildViews()
+        bindSearchBar()
+        registerCell()
       
         let dataSource = RxTableViewSectionedReloadDataSource<SectionOfWeather>(
             configureCell: { _, tableView, indexPath, item in
-               let cell = tableView.dequeueReusableCell(
-                   withIdentifier: "WeatherCustomCell",
-                   for: indexPath) as! WeatherCustomCell
+                let cell: WeatherCustomCell = tableView.dequeueReusableCell(for: indexPath)
                 cell.setCellUIProperties(
                     cityCurrentWeather: item.currentWeather,
                     cityForecastWeather: item.forecastWeather)
@@ -46,8 +40,12 @@ class WeatherViewController:
         presenter.getWeatherData().map {[SectionOfWeather(header: "weather", items: $0)]}
           .bind(to: tableView.rx.items(dataSource: dataSource))
           .disposed(by: disposeBag)
-        bindSearchBar()
     }
+    
+    private func registerCell() {
+        tableView.registerCell(WeatherCustomCell.self)
+    }
+       
     
     private func bindSearchBar() {
         let searchButtonClicked = searchController

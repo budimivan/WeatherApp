@@ -1,10 +1,11 @@
 # Podfile
 use_frameworks!
+platform :ios, '13.0'
 
 target 'WeatherApp' do
-	platform :ios, '13.0'
-    pod 'RxSwift', '~> 5'
-    pod 'RxCocoa', '~> 5'
-    pod 'Kingfisher', '~> 5'
-    pod 'RxDataSources', '~> 4.0'
+   pod 'RxSwift', '~> 5'
+   pod 'RxCocoa', '~> 5'
+   pod 'Kingfisher', '~> 5'
+   pod 'RxDataSources', '~> 4.0'
+   pod 'PureLayout'
 end
