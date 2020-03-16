@@ -20,8 +20,10 @@ extension WeatherViewController {
     }
     
     private func styleViews() {
-        tableView.separatorStyle = .singleLine
-        tableView.rowHeight = view.safeAreaLayoutGuide.layoutFrame.size.height / 4
+        navigationController?.hidesBarsOnSwipe = true
+        navigationController?.setNavigationBarHidden(true, animated: false)
+        tableView.separatorStyle = .none
+        tableView.rowHeight = view.safeAreaLayoutGuide.layoutFrame.size.height / 2.4
         searchController.obscuresBackgroundDuringPresentation = true
         searchController.searchBar.placeholder = AppStrings.searchBarPlaceHolder
     }

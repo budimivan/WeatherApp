@@ -1,8 +1,8 @@
-import UIKit
-import RxSwift
 import CoreData
+import RxSwift
 import RxCocoa
 import RxDataSources
+import UIKit
 import PureLayout
 
 class WeatherViewController:
@@ -36,10 +36,36 @@ class WeatherViewController:
                 self?.presenter.handleCitySelected(city: weatherViewModel.currentWeather)
             })
             .disposed(by: disposeBag)
-    
+        
+        //TODO: implement deleting
+        tableView
+            .rx
+            .itemDeleted
+            .subscribe {
+        }.disposed(by: disposeBag)
+        
         presenter.getWeatherData().map {[SectionOfWeather(header: "weather", items: $0)]}
           .bind(to: tableView.rx.items(dataSource: dataSource))
           .disposed(by: disposeBag)
+        
+        dataSource.canEditRowAtIndexPath = { dataSource, indexPath  in
+             return true
+        }
+        
+        dataSource.canMoveRowAtIndexPath = { dataSource, indexPath  in
+            return true
+        }
+    }
+    
+    override var prefersHomeIndicatorAutoHidden: Bool {
+        return true
+    }
+    
+    override func setEditing(
+               _ editing: Bool,
+               animated: Bool) {
+               super.setEditing(!isEditing, animated: true)
+               tableView.setEditing(!tableView.isEditing, animated: true)
     }
     
     private func registerCell() {
