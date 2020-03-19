@@ -81,39 +81,36 @@ extension DetailsWeatherViewController {
     }
     
     private func styleViews() {
-        sunRise.font = UIFont(name: "Roboto-Regular", size: 30)
-        sunSet.font = UIFont(name: "Roboto-Regular", size: 30)
-        wind.font = UIFont(name: "Roboto-Regular", size: 30)
-        clouds.font = UIFont(name: "Roboto-Regular", size: 30)
-        sunRise.textColor = .white
-        sunSet.textColor = .white
-        wind.textColor = .white
-        clouds.textColor = .white
+        sunRise.font = .detailsFont
+        sunSet.font = .detailsFont
+        wind.font = .detailsFont
+        clouds.font = .detailsFont
+        sunRise.textColor = .appThemeColor
+        sunSet.textColor = .appThemeColor
+        wind.textColor = .appThemeColor
+        clouds.textColor = .appThemeColor
     
-        sunRiseStackView.alignment = .center
-        sunRiseStackView.distribution = .fillEqually
-        sunRiseStackView.spacing = 20
+        sunRiseStackView.alignment = AppLayout.alignment
+        sunRiseStackView.distribution = AppLayout.distribution
+        sunRiseStackView.spacing = AppLayout.spacing
     
-        sunSetStackView.alignment = .center
-        sunSetStackView.distribution = .fillEqually
-        sunSetStackView.spacing = 20
+        sunSetStackView.alignment = AppLayout.alignment
+        sunSetStackView.distribution = AppLayout.distribution
+        sunSetStackView.spacing = AppLayout.spacing
         
-        windStackView.alignment = .center
-        windStackView.distribution = .fillEqually
-        windStackView.spacing = 20
+        windStackView.alignment = AppLayout.alignment
+        windStackView.distribution = AppLayout.distribution
+        windStackView.spacing = AppLayout.spacing
         
-        cloudsStackView.alignment = .center
-        cloudsStackView.distribution = .fillEqually
-        cloudsStackView.spacing = 20
+        cloudsStackView.alignment = AppLayout.alignment
+        cloudsStackView.distribution = AppLayout.distribution
+        cloudsStackView.spacing = AppLayout.spacing
         
-        detailsView.neumorphicLayer?.cornerRadius = 20
-        detailsView.neumorphicLayer?.depthType = .convex
-        detailsView.neumorphicLayer?.elementDepth = 100
-        detailsView.neumorphicLayer?.lightShadowOpacity = 10
-        detailsView.neumorphicLayer?.darkShadowOpacity = 10
-        detailsView.neumorphicLayer?.elementColor = CGColor(srgbRed: -1.33692,
-                                                            green: 0.62539,
-                                                            blue: 0.96147,
-                                                            alpha: 0.5)
+        detailsView.neumorphicLayer?.cornerRadius = AppLayout.cornerRadius
+        detailsView.neumorphicLayer?.depthType = AppLayout.depthType
+        detailsView.neumorphicLayer?.elementDepth = AppLayout.elementDepth
+        detailsView.neumorphicLayer?.lightShadowOpacity = AppShadows.lightShadowOpacity
+        detailsView.neumorphicLayer?.darkShadowOpacity = AppShadows.darkShadowOpacity
+        detailsView.neumorphicLayer?.elementColor = .detailsBackgroundColor
     }
 }

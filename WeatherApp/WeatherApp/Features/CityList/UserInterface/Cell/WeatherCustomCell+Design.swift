@@ -72,38 +72,35 @@ extension WeatherCustomCell {
     
     private func styleViews() {
         self.selectionStyle = .none
-        cityName.font = UIFont(name: "Roboto-Regular", size: 30)
-        currentTemparature.font = UIFont(name: "Roboto-Regular", size: 20)
-        forecastDayOne.font = UIFont(name: "Roboto-Regular", size: 20)
-        forecastDayTwo.font = UIFont(name: "Roboto-Regular", size: 20)
-        forecastDayThree.font = UIFont(name: "Roboto-Regular", size: 20)
-        forecastDayFour.font = UIFont(name: "Roboto-Regular", size: 20)
-        forecastDayFive.font = UIFont(name: "Roboto-Regular", size: 20)
-        cityName.textColor = .white
-        currentTemparature.textColor = .white
-        forecastDayOne.textColor = .white
-        forecastDayTwo.textColor = .white
-        forecastDayThree.textColor = .white
-        forecastDayFour.textColor = .white
-        forecastDayFive.textColor = .white
+        cityName.font = .cellFont
+        currentTemparature.font = .cellFont
+        forecastDayOne.font = .cellFont
+        forecastDayTwo.font = .cellFont
+        forecastDayThree.font = .cellFont
+        forecastDayFour.font = .cellFont
+        forecastDayFive.font = .cellFont
+        cityName.textColor = .appThemeColor
+        currentTemparature.textColor = .appThemeColor
+        forecastDayOne.textColor = .appThemeColor
+        forecastDayTwo.textColor = .appThemeColor
+        forecastDayThree.textColor = .appThemeColor
+        forecastDayFour.textColor = .appThemeColor
+        forecastDayFive.textColor = .appThemeColor
         
         stackViewCurrent.alignment = .fill
         stackViewForecast.alignment = .fill
-        stackViewLabel.alignment = .center
-        stackViewLabel.distribution = .fillEqually
-        stackViewLabel.spacing = 10
-        stackViewImage.alignment = .center
-        stackViewImage.distribution = .fillEqually
-        stackViewImage.spacing = 10
+        stackViewLabel.alignment = AppLayout.alignment
+        stackViewLabel.distribution = AppLayout.distribution
+        stackViewLabel.spacing = AppLayout.spacing - 10
+        stackViewImage.alignment = AppLayout.alignment
+        stackViewImage.distribution = AppLayout.distribution
+        stackViewImage.spacing = AppLayout.spacing - 10
         
-        cellView.neumorphicLayer?.cornerRadius = 20
-        cellView.neumorphicLayer?.depthType = .convex
-        cellView.neumorphicLayer?.elementDepth = 50
-        cellView.neumorphicLayer?.lightShadowOpacity = 1
-        cellView.neumorphicLayer?.darkShadowOpacity = 1
-        cellView.neumorphicLayer?.elementColor = CGColor(srgbRed: -1.33692,
-                                                         green: 0.62539,
-                                                         blue: 0.96147,
-                                                         alpha: 0.3)
+        cellView.neumorphicLayer?.cornerRadius = AppLayout.cornerRadius
+        cellView.neumorphicLayer?.depthType = AppLayout.depthType
+        cellView.neumorphicLayer?.elementDepth = AppLayout.elementDepth
+        cellView.neumorphicLayer?.lightShadowOpacity = AppShadows.lightShadowOpacity
+        cellView.neumorphicLayer?.darkShadowOpacity = AppShadows.darkShadowOpacity
+        cellView.neumorphicLayer?.elementColor = .cellBackgroundColor
     }
 }

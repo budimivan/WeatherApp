@@ -49,7 +49,7 @@ class WeatherCustomCell: UITableViewCell {
         currentTemparature.text = String(format: "%.0f", cityCurrentWeather.weatherTemparature) + " °C"
         let date = Date()
         let format = DateFormatter()
-        format.dateFormat = "EE"
+        format.dateFormat = Date.DayStyle.shortDayOfWeek.dateFormat
         forecastDayOne.set(
             topLine: format.string(from: date.add(numberOfDays: 1)),
             bottomLine: String(format: "%.0f", cityForecastWeather.weatherTemparature[0]) + " °C")
